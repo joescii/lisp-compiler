@@ -20,7 +20,7 @@ object CompilerBuild extends Build {
       name := "parser",
       description := "Source parser",
       libraryDependencies ++= Seq(
-        "org.scalatest" % "scalatest_2.10" % "2.2.1" % "test"
+        "org.parboiled" %% "parboiled-scala" % "1.1.6" % "compile"
       )
     )
   )
@@ -32,6 +32,7 @@ object CompilerBuild extends Build {
       name := "jvm-target",
       description := "JVM bytecode target compiler",
       libraryDependencies ++= Seq(
+        "me.qmx.jitescript" % "jitescript" % "0.3.0" % "compile"
       )
     )
   ).dependsOn(parser)
@@ -47,16 +48,23 @@ object CompilerBuild extends Build {
     )
   ).dependsOn(parser)
   
-  lazy val compiler = Project(
-    id = "compiler",
-    base = file("compiler"),
-    settings = commonSettings ++ Seq(
-      name := "compiler",
-      description := "All of this crap rolled into a compiler",
-      libraryDependencies ++= Seq(
+  lazy val compiler = {
+    import sbtassembly.Plugin._
+    import AssemblyKeys._ 
+
+    Project(
+      id = "compiler",
+      base = file("compiler"),
+      settings = commonSettings ++ assemblySettings ++ Seq(
+        name := "compiler",
+        description := "All of this crap rolled into a compiler",
+        jarName in assembly := "lispc.jar",
+        mainClass in assembly := Some("com.joescii.lisp.Compiler"),
+        libraryDependencies ++= Seq(
+        )
       )
-    )
-  ).dependsOn(parser, jvm_target, js_target)
+    ).dependsOn(parser, jvm_target, js_target)
+  }
   
   lazy val plugin = Project(
     id = "plugin",
