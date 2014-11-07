@@ -79,7 +79,7 @@ object CompilerBuild extends Build {
   ).dependsOn(compiler)
 
   lazy val root = Project(
-    id = "root",
+    id = "lisp-compiler-projects",
     base = file(".")
   ).aggregate(parser, jvm_target, js_target, compiler, plugin)
 
