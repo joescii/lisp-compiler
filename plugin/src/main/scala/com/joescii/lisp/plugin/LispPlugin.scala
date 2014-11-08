@@ -19,7 +19,6 @@ object LispPlugin extends Plugin {
   val lispcSettings: Seq[Def.Setting[_]] = Seq(
     lispcImpl,
     (compile in Compile) <<= (compile in Compile) dependsOn lispcKey
-    comp
   )
 
 }
