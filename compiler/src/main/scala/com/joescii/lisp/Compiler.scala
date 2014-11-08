@@ -1,6 +1,7 @@
 package com.joescii.lisp
 
-import com.joescii.jvmc.HelloWorld
+import jvmc.HelloWorld
+
 import java.io.{FileOutputStream, File}
 
 object CompilerMain extends App {
@@ -28,10 +29,12 @@ object Compiler {
     val jite = HelloWorld.jite
 
     val helloClassFile = new File(target, "HelloJite.class")
-//    if(helloClassFile.exists()) helloClassFile.delete()
 
     val outStream = new FileOutputStream(helloClassFile)
     outStream.write(jite.toBytes)
+    outStream.flush()
     outStream.close()
+
+    Seq(helloClassFile)
   }
 }

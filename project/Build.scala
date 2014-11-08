@@ -7,7 +7,7 @@ object CompilerBuild extends Build {
     organization := "com.joescii",
     scalaVersion := "2.10.4",
     scalacOptions ++= Seq("-deprecation", "-unchecked", "-feature"),
-    version := "0.0.1",
+    version := "0.0.1-SNAPSHOT",
     resolvers ++= Seq(
       "sonatype-public" at "https://oss.sonatype.org/content/groups/public"
     )
@@ -70,9 +70,10 @@ object CompilerBuild extends Build {
     id = "plugin",
     base = file("plugin"),
     settings = commonSettings ++ Seq(
-      name := "plugin",
+      name := "lispc",
       description := "The compiler packaged as an sbt plugin",
       sbtPlugin := true,
+      publishMavenStyle := false,
       libraryDependencies ++= Seq(
       )
     )
