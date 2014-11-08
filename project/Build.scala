@@ -59,7 +59,7 @@ object CompilerBuild extends Build {
         name := "compiler",
         description := "All of this crap rolled into a compiler",
         jarName in assembly := "lispc.jar",
-        mainClass in assembly := Some("com.joescii.lisp.Compiler"),
+        mainClass in assembly := Some("com.joescii.lisp.CompilerMain"),
         libraryDependencies ++= Seq(
         )
       )
