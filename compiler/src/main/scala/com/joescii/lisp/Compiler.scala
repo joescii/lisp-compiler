@@ -27,9 +27,10 @@ object CompilerMain extends App {
 
 object Compiler {
   def compile(src:File, target:File) = {
-    val program = """(print "Hello World!")"""
-    println("Compiling: "+program)
-    new LispParser().calculate(program)
+    val code = """(print "Hello World!")"""
+    println("Compiling: "+code)
+    val program = LispParser.parseWithTree(code)
+    println(program)
 
     val jite = HelloWorld.jite
 

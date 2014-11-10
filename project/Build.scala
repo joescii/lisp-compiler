@@ -13,6 +13,7 @@ object CompilerBuild extends Build {
     )
   )
   val parboiled = "org.parboiled" %% "parboiled-scala" % "1.1.6" % "compile"
+  val scalatest = "org.scalatest" %% "scalatest"       % "2.2.1" % "test"
 
   lazy val parser = Project(
     id = "parser",
@@ -21,7 +22,8 @@ object CompilerBuild extends Build {
       name := "parser",
       description := "Source parser",
       libraryDependencies ++= Seq(
-        parboiled
+        parboiled,
+        scalatest
       )
     )
   )

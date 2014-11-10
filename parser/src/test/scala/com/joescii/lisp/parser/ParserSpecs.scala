@@ -1,0 +1,77 @@
+package com.joescii.lisp.parser
+
+import ast._
+import org.scalatest._
+
+class ParserSpecs extends WordSpec with ShouldMatchers {
+  "The Parser" should {
+    "parse a single line with one symbol" in {
+      val code = "(symbol)"
+      val program = LispParser.parse(code)
+
+      program should be (
+        Program(List(
+          ListNode(List(
+            SymbolNode("symbol")
+          ))
+        ))
+      )
+    }
+
+    "parse a single line with one number" in {
+      val code = "(42)"
+      val program = LispParser.parse(code)
+
+      program should be (
+        Program(List(
+          ListNode(List(
+            NumberNode(42)
+          ))
+        ))
+      )
+    }
+
+    "parse a single line with one string" in {
+      val code = """("Roll Tide!")"""
+      val program = LispParser.parse(code)
+
+      program should be (
+        Program(List(
+          ListNode(List(
+            StringNode("Roll Tide!")
+          ))
+        ))
+      )
+    }
+
+    "parse a single line with a symbol, a string, and a number" in {
+      val code = """(concat "Roll Tide!" 16)"""
+      val program = LispParser.parse(code)
+
+      program should be (
+        Program(List(
+          ListNode(List(
+            SymbolNode("concat"),
+            StringNode("Roll Tide!"),
+            NumberNode(16)
+          ))
+        ))
+      )
+    }
+
+    "parse a single line with three symbols" ignore {
+      val code = "(+ a b)"
+      val program = LispParser.parse(code)
+
+      program should be (
+        Program(List(
+          ListNode(List(
+            SymbolNode("+"),
+            SymbolNode("a"),
+            SymbolNode("b")
+          ))
+        ))
+      )
+    }
+  }
+}

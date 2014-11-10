@@ -7,6 +7,20 @@ import org.parboiled.scala._
 import org.parboiled.errors.{ParsingException, ErrorUtils}
 import org.parboiled.support.{DebuggingValueStack, ParseTreeUtils}
 
+object LispParser {
+  def parse(program:String) = {
+    val result = new LispParser().parse(program)
+    result.valueStack.pop()
+  }
+
+  def parseWithTree(program:String) = {
+    val result = new LispParser().parse(program)
+    val tree = ParseTreeUtils.printNodeTree(result)
+    println(tree)
+    result.valueStack.pop()
+  }
+}
+
 class LispParser extends Parser {
   override val buildParseTree = true
 
@@ -40,10 +54,7 @@ class LispParser extends Parser {
 
   def WhiteSpace = rule { anyOf(" \n\r\t\f") }
 
-  def calculate(expression: String) = {
-    val parsingResult = ReportingParseRunner(Prog).run(expression)
-    val tree = ParseTreeUtils.printNodeTree(parsingResult)
-    println(tree)
-    println(parsingResult.valueStack.peek)
+  def parse(program: String) = {
+    ReportingParseRunner(Prog).run(program)
   }
 }
