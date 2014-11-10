@@ -4,6 +4,7 @@ import jvmc.HelloWorld
 import parser.LispParser
 
 import java.io.{FileOutputStream, File}
+import scala.io.Source
 
 object CompilerMain extends App {
   if(args.length < 2){
@@ -27,10 +28,24 @@ object CompilerMain extends App {
 
 object Compiler {
   def compile(src:File, target:File) = {
-    val code = """(print "Hello World!")"""
-    println("Compiling: "+code)
-    val program = LispParser.parseWithTree(code)
-    println(program)
+    val srcs = if(src.isDirectory) {
+      src.listFiles().filter(_.getName.endsWith(".lisp")).toList
+    } else if(src.getName.endsWith(".lisp")) {
+      List(src)
+    } else {
+      List()
+    }
+
+    println("Compiling "+srcs.length+" sources")
+
+    for {
+      s <- srcs
+    } {
+      val code = Source.fromFile(s, "utf-8").mkString
+      println("Compiling: "+code)
+      val program = LispParser.parse(code)
+      println(program)
+    }
 
     val jite = HelloWorld.jite
 
