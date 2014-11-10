@@ -24,7 +24,7 @@ object LispParser {
 class LispParser extends Parser {
   override val buildParseTree = true
 
-  def Prog = rule { zeroOrMore(Lst, separator = WhiteSpace) ~~> Program }
+  def Prog = rule { zeroOrMore(WhiteSpace) ~ zeroOrMore(Lst, separator = zeroOrMore(WhiteSpace)) ~~> Program }
 
   def Lst = rule { "(" ~ oneOrMore(Atom, separator = WhiteSpace) ~ ")" ~~> ListNode }
 
