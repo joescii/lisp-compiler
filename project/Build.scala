@@ -14,6 +14,7 @@ object CompilerBuild extends Build {
   )
   val parboiled = "org.parboiled" %% "parboiled-scala" % "1.1.6" % "compile"
   val scalatest = "org.scalatest" %% "scalatest"       % "2.2.1" % "test"
+  val lift      = "net.liftweb"   %% "lift-webkit"     % "2.5.1" % "compile"
 
   lazy val parser = Project(
     id = "parser",
@@ -28,6 +29,17 @@ object CompilerBuild extends Build {
     )
   )
 
+  lazy val metal = Project(
+    id = "metal",
+    base = file("metal"),
+    settings = commonSettings ++ Seq(
+      name := "metal",
+      description := "Abstraction of metal to be compiled to",
+      libraryDependencies ++= Seq(
+      )
+    )
+  ).dependsOn(parser)
+
   lazy val jvm_target = Project(
     id = "jvm-target",
     base = file("jvm-target"),
@@ -38,7 +50,7 @@ object CompilerBuild extends Build {
         "me.qmx.jitescript" % "jitescript" % "0.3.0" % "compile"
       )
     )
-  ).dependsOn(parser)
+  ).dependsOn(metal, parser)
 
   lazy val js_target = Project(
     id = "js-target",
@@ -47,9 +59,10 @@ object CompilerBuild extends Build {
       name := "js-target",
       description := "JavaScript target compiler",
       libraryDependencies ++= Seq(
+        lift
       )
     )
-  ).dependsOn(parser)
+  ).dependsOn(metal, parser)
   
   lazy val compiler = {
     import sbtassembly.Plugin._
@@ -64,7 +77,6 @@ object CompilerBuild extends Build {
         jarName in assembly := "lispc.jar",
         mainClass in assembly := Some("com.joescii.lisp.CompilerMain"),
         libraryDependencies ++= Seq(
-          parboiled
         )
       )
     ).dependsOn(parser, jvm_target, js_target)
