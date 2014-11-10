@@ -59,16 +59,34 @@ class ParserSpecs extends WordSpec with ShouldMatchers {
       )
     }
 
-    "parse a single line with three symbols" ignore {
+    "parse a single line with three symbols, including a special symbol" in {
       val code = "(+ a b)"
       val program = LispParser.parse(code)
 
-      program should be (
+      program should be(
         Program(List(
           ListNode(List(
             SymbolNode("+"),
             SymbolNode("a"),
             SymbolNode("b")
+          ))
+        ))
+      )
+    }
+
+    "parse a single line with multi-char special-char symbol and several other args" in {
+      val code = """(~~> a b c 15 "blah")"""
+      val program = LispParser.parse(code)
+
+      program should be (
+        Program(List(
+          ListNode(List(
+            SymbolNode("~~>"),
+            SymbolNode("a"),
+            SymbolNode("b"),
+            SymbolNode("c"),
+            NumberNode(15),
+            StringNode("blah")
           ))
         ))
       )
