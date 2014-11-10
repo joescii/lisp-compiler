@@ -12,6 +12,7 @@ object CompilerBuild extends Build {
       "sonatype-public" at "https://oss.sonatype.org/content/groups/public"
     )
   )
+  val parboiled = "org.parboiled" %% "parboiled-scala" % "1.1.6" % "compile"
 
   lazy val parser = Project(
     id = "parser",
@@ -20,7 +21,7 @@ object CompilerBuild extends Build {
       name := "parser",
       description := "Source parser",
       libraryDependencies ++= Seq(
-        "org.parboiled" %% "parboiled-scala" % "1.1.6" % "compile"
+        parboiled
       )
     )
   )
@@ -61,6 +62,7 @@ object CompilerBuild extends Build {
         jarName in assembly := "lispc.jar",
         mainClass in assembly := Some("com.joescii.lisp.CompilerMain"),
         libraryDependencies ++= Seq(
+          parboiled
         )
       )
     ).dependsOn(parser, jvm_target, js_target)

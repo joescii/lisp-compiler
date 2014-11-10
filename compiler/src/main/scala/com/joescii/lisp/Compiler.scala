@@ -1,6 +1,7 @@
 package com.joescii.lisp
 
 import jvmc.HelloWorld
+import parser.LispParser
 
 import java.io.{FileOutputStream, File}
 
@@ -26,6 +27,10 @@ object CompilerMain extends App {
 
 object Compiler {
   def compile(src:File, target:File) = {
+    val program = """(print "Hello World!")"""
+    println("Compiling: "+program)
+    new LispParser().calculate(program)
+
     val jite = HelloWorld.jite
 
     val helloClassFile = new File(target, "HelloJite.class")
