@@ -26,7 +26,7 @@ class LispParser extends Parser {
 
   def Prog = rule { zeroOrMore(WhiteSpace) ~ zeroOrMore(Lst, separator = zeroOrMore(WhiteSpace)) ~~> Program }
 
-  def Lst = rule { "(" ~ oneOrMore(Atom, separator = WhiteSpace) ~ ")" ~~> ListNode }
+  def Lst:Rule1[ListNode] = rule { "(" ~ oneOrMore(Atom | Lst, separator = WhiteSpace) ~ ")" ~~> ListNode }
 
   def Atom:Rule1[AtomNode] = rule ( Symbol | Number | Strng )
 

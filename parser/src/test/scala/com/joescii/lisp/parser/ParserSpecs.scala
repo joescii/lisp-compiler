@@ -122,5 +122,26 @@ class ParserSpecs extends WordSpec with ShouldMatchers {
         ))
       )
     }
+
+    "parse a list within a list" in {
+      val code = "(+ 1 (* 4 5) 10)"
+      val program = LispParser.parse(code)
+
+      program should be (
+        Program(List(
+          ListNode(List(
+            SymbolNode("+"),
+            NumberNode(1),
+            ListNode(List(
+              SymbolNode("*"),
+              NumberNode(4),
+              NumberNode(5)
+            )),
+            NumberNode(10)
+          ))
+        ))
+      )
+
+    }
   }
 }

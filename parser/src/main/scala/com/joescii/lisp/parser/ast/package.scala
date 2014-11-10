@@ -7,7 +7,7 @@ package object ast {
   case class SymbolNode(symbol:String)      extends AtomNode
   case class NumberNode(number:Int)         extends AtomNode
   case class StringNode(string:String)      extends AtomNode
-  case class ListNode(atoms:List[AtomNode]) extends AstNode
+  case class ListNode(atoms:List[AstNode])  extends AstNode
 
   case class Program(lisps:List[ListNode])
 }
