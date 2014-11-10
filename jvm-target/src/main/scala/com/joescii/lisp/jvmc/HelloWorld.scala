@@ -8,10 +8,10 @@ import java.io.PrintStream
 object HelloWorld {
   lazy val jite = new JiteClass("HelloJite") {
     defineMethod("main", ACC_PUBLIC | ACC_STATIC, sig(classOf[Unit], classOf[Array[String]]), new CodeBlock()
-      .ldc("HelloWorld!")
       .getstatic(p(classOf[System]), "out", ci(classOf[PrintStream]))
-      .swap()
-      .invokevirtual(p(classOf[PrintStream]), "println", sig(classOf[Unit], classOf[Object]))
+      .ldc("Hello Jite!")
+//      .swap()
+      .invokevirtual(p(classOf[PrintStream]), "println", sig(classOf[Unit], classOf[String]))
       .voidreturn()
     )
   }
