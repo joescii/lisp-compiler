@@ -1,7 +1,7 @@
 package com.joescii.lisp
 
 import parser.LispParser
-import jvm.metal.JvmMetal
+import metal.jvm.JvmMetal
 
 import java.io.{FileOutputStream, File}
 import scala.io.Source
