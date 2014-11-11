@@ -2,10 +2,11 @@ package com.joescii.lisp
 package metal
 
 import parser.ast._
+import java.io.File
 
 /**
  * Base trait for METAL!  (i.e. a compilation target)
  */
 trait Metal {
-  def compile(ast:Program):Array[Byte]
+  def forge(program:Program, target:File):Seq[File]
 }

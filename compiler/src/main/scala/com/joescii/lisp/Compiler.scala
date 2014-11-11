@@ -2,8 +2,9 @@ package com.joescii.lisp
 
 import parser.LispParser
 import metal.jvm.JvmMetal
+import metal.js.JsMetal
 
-import java.io.{FileOutputStream, File}
+import java.io.File
 import scala.io.Source
 
 object CompilerMain extends App {
@@ -50,7 +51,8 @@ object Compiler {
     }
 
     val classFiles = programs.flatMap(p => JvmMetal.forge(p, jvmTarget))
+    val jsFiles    = programs.flatMap(p => JsMetal.forge(p, jsTarget))
 
-    (classFiles, Seq())
+    (classFiles, jsFiles)
   }
 }
