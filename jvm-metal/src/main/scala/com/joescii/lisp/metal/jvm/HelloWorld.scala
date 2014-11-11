@@ -1,4 +1,4 @@
-package com.joescii.lisp.jvm.metal
+package com.joescii.lisp.metal.jvm
 
 import me.qmx.jitescript._
 import org.objectweb.asm.Opcodes._

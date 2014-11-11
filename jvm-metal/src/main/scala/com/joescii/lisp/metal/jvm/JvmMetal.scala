@@ -1,5 +1,6 @@
 package com.joescii.lisp
-package jvm.metal
+package metal
+package jvm
 
 import parser.ast._
 import java.io.{FileOutputStream, File}

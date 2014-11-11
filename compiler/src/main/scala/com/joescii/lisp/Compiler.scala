@@ -46,10 +46,7 @@ object Compiler {
 
     val programs = srcs.map { s =>
       val code = Source.fromFile(s, "utf-8").mkString
-      println("Compiling: "+code)
-      val program = LispParser.parse(code)
-      println(program)
-      program
+      LispParser.parse(code)
     }
 
     val classFiles = programs.flatMap(p => JvmMetal.forge(p, jvmTarget))
