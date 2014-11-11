@@ -40,24 +40,24 @@ object CompilerBuild extends Build {
     )
   ).dependsOn(parser)
 
-  lazy val jvm_target = Project(
-    id = "jvm-target",
-    base = file("jvm-target"),
+  lazy val jvm_metal = Project(
+    id = "jvm-metal",
+    base = file("jvm-metal"),
     settings = commonSettings ++ Seq(
-      name := "jvm-target",
-      description := "JVM bytecode target compiler",
+      name := "jvm-metal",
+      description := "Compiles to the JVM bytecode metal",
       libraryDependencies ++= Seq(
         "me.qmx.jitescript" % "jitescript" % "0.3.0" % "compile"
       )
     )
   ).dependsOn(metal, parser)
 
-  lazy val js_target = Project(
-    id = "js-target",
-    base = file("js-target"),
+  lazy val js_metal = Project(
+    id = "js-metal",
+    base = file("js-metal"),
     settings = commonSettings ++ Seq(
-      name := "js-target",
-      description := "JavaScript target compiler",
+      name := "js-metal",
+      description := "Compiles to the JS metal",
       libraryDependencies ++= Seq(
         lift
       )
@@ -79,7 +79,7 @@ object CompilerBuild extends Build {
         libraryDependencies ++= Seq(
         )
       )
-    ).dependsOn(parser, jvm_target, js_target)
+    ).dependsOn(parser, jvm_metal, js_metal)
   }
   
   lazy val plugin = Project(
@@ -98,6 +98,6 @@ object CompilerBuild extends Build {
   lazy val root = Project(
     id = "lisp-compiler-projects",
     base = file(".")
-  ).aggregate(parser, metal, jvm_target, js_target, compiler, plugin)
+  ).aggregate(parser, metal, jvm_metal, js_metal, compiler, plugin)
 
 }
