@@ -8,16 +8,16 @@ import org.parboiled.errors.{ParsingException, ErrorUtils}
 import org.parboiled.support.{DebuggingValueStack, ParseTreeUtils}
 
 object LispParser {
-  def parse(program:String) = {
+  def parse(program:String):Program = {
     val result = new LispParser().parse(program)
-    result.valueStack.pop()
+    result.valueStack.pop().asInstanceOf[Program]
   }
 
-  def parseWithTree(program:String) = {
+  def parseWithTree(program:String):Program = {
     val result = new LispParser().parse(program)
     val tree = ParseTreeUtils.printNodeTree(result)
     println(tree)
-    result.valueStack.pop()
+    result.valueStack.pop().asInstanceOf[Program]
   }
 }
 

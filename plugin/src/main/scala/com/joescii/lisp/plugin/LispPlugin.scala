@@ -10,10 +10,13 @@ object LispPlugin extends Plugin {
   val lispcKey = TaskKey[Seq[File]]("lispc", "Compiles lisp")
 
   val lispcImpl = lispcKey <<=
-    (sourceDirectory in Compile, classDirectory in Compile) map { (src, dst) =>
+    (sourceDirectory in Compile, classDirectory in Compile, resourceManaged in Compile) map { (src, dst, rsrc) =>
       val lisp = src / "lisp"
+      val lispjs = rsrc / "lispjs"
       dst.mkdirs()
-      LispC.compile(lisp, dst)
+      lispjs.mkdirs()
+      val outFiles = LispC.compile(lisp, dst, lispjs)
+      outFiles._1 ++ outFiles._2
     }
 
   val lispcSettings: Seq[Def.Setting[_]] = Seq(
