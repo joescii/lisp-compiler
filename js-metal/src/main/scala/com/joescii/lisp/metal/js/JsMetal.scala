@@ -38,8 +38,8 @@ object JsMetal extends Metal {
     })
 
     printMe match {
-      case Some(str) => Call("console.log", JString(str))
-      case None => Call("console.log")
+      case Some(str) => Call("print", JString(str))
+      case None => Call("print")
     }
   }
 }
