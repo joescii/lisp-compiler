@@ -22,6 +22,7 @@ object JsMetal extends Metal {
       }
     }
 
+    out.println("#!/usr/bin/jjs")
     js.foreach(j => out.print(j.toJsCmd))
     out.flush()
     out.close()
