@@ -1,4 +1,4 @@
-package com.joescii.lisp.parser
+package com.joescii.lisp.ir
 
 import org.scalatest.{ShouldMatchers, WordSpec}
 import com.joescii.lisp.parser.ast._
