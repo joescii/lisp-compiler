@@ -8,23 +8,23 @@ import org.parboiled.errors.{ParsingException, ErrorUtils}
 import org.parboiled.support.{DebuggingValueStack, ParseTreeUtils}
 
 object LispParser {
-  def parse(program:String):Program = {
+  def parse(program:String):ProgramNode = {
     val result = new LispParser().parse(program)
-    result.valueStack.pop().asInstanceOf[Program]
+    result.valueStack.pop().asInstanceOf[ProgramNode]
   }
 
-  def parseWithTree(program:String):Program = {
+  def parseWithTree(program:String):ProgramNode = {
     val result = new LispParser().parse(program)
     val tree = ParseTreeUtils.printNodeTree(result)
     println(tree)
-    result.valueStack.pop().asInstanceOf[Program]
+    result.valueStack.pop().asInstanceOf[ProgramNode]
   }
 }
 
 class LispParser extends Parser {
   override val buildParseTree = true
 
-  def Prog = rule { zeroOrMore(WhiteSpace) ~ zeroOrMore(Lst, separator = zeroOrMore(WhiteSpace)) ~~> Program }
+  def Prog = rule { zeroOrMore(WhiteSpace) ~ zeroOrMore(Lst, separator = zeroOrMore(WhiteSpace)) ~~> ProgramNode }
 
   def Lst:Rule1[ListNode] = rule { "(" ~ oneOrMore(Atom | Lst, separator = WhiteSpace) ~ ")" ~~> ListNode }
 

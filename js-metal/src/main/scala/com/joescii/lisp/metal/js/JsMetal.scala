@@ -11,7 +11,7 @@ import JE._
 import JsCmds._
 
 object JsMetal extends Metal {
-  override def forge(program:Program, target:File):Seq[File] = {
+  override def forge(program:ProgramNode, target:File):Seq[File] = {
     val outFile = new File(target, "HelloJs.js")
     val out = new PrintStream(new FileOutputStream(outFile))
 

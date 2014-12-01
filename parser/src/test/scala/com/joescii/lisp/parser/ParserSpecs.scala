@@ -10,7 +10,7 @@ class ParserSpecs extends WordSpec with ShouldMatchers {
       val program = LispParser.parse(code)
 
       program should be (
-        Program(List(
+        ProgramNode(List(
           ListNode(List(
             SymbolNode("symbol")
           ))
@@ -23,7 +23,7 @@ class ParserSpecs extends WordSpec with ShouldMatchers {
       val program = LispParser.parse(code)
 
       program should be (
-        Program(List(
+        ProgramNode(List(
           ListNode(List(
             NumberNode(42)
           ))
@@ -36,7 +36,7 @@ class ParserSpecs extends WordSpec with ShouldMatchers {
       val program = LispParser.parse(code)
 
       program should be (
-        Program(List(
+        ProgramNode(List(
           ListNode(List(
             StringNode("Roll Tide!")
           ))
@@ -49,7 +49,7 @@ class ParserSpecs extends WordSpec with ShouldMatchers {
       val program = LispParser.parse(code)
 
       program should be (
-        Program(List(
+        ProgramNode(List(
           ListNode(List(
             SymbolNode("concat"),
             StringNode("Roll Tide!"),
@@ -64,7 +64,7 @@ class ParserSpecs extends WordSpec with ShouldMatchers {
       val program = LispParser.parse(code)
 
       program should be(
-        Program(List(
+        ProgramNode(List(
           ListNode(List(
             SymbolNode("+"),
             SymbolNode("a"),
@@ -82,7 +82,7 @@ class ParserSpecs extends WordSpec with ShouldMatchers {
       val program = LispParser.parse(code)
 
       program should be (
-        Program(List(
+        ProgramNode(List(
           ListNode(List(
             SymbolNode("~~>"),
             SymbolNode("a"),
@@ -104,7 +104,7 @@ class ParserSpecs extends WordSpec with ShouldMatchers {
       val program = LispParser.parse(code)
 
       program should be (
-        Program(List(
+        ProgramNode(List(
           ListNode(List(
             SymbolNode("~~>"),
             SymbolNode("a"),
@@ -128,7 +128,7 @@ class ParserSpecs extends WordSpec with ShouldMatchers {
       val program = LispParser.parse(code)
 
       program should be (
-        Program(List(
+        ProgramNode(List(
           ListNode(List(
             SymbolNode("+"),
             NumberNode(1),
