@@ -29,6 +29,18 @@ object CompilerBuild extends Build {
     )
   )
 
+  lazy val ir = Project(
+    id = "intermediate-representation",
+    base = file("ir"),
+    settings = commonSettings ++ Seq(
+      name := "ir",
+      description := "Intermediate Representation",
+      libraryDependencies ++= Seq(
+        scalatest
+      )
+    )
+  ).dependsOn(parser)
+
   lazy val metal = Project(
     id = "metal",
     base = file("metal"),
@@ -98,6 +110,6 @@ object CompilerBuild extends Build {
   lazy val root = Project(
     id = "lisp-compiler-projects",
     base = file(".")
-  ).aggregate(parser, metal, jvm_metal, js_metal, compiler, plugin)
+  ).aggregate(parser, ir, metal, jvm_metal, js_metal, compiler, plugin)
 
 }
