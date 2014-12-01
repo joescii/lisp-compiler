@@ -21,5 +21,23 @@ class IntermediateRepresentationSpecs extends WordSpec with ShouldMatchers {
 
       IntermediateRepresentation.interpret(progAst) should be (prog)
     }
+
+    "create multiple prints for a vararg-print" in {
+      val progAst = ProgramNode(List(
+        ListNode(List(
+          SymbolNode("print"),
+          StringNode("Roll"),
+          StringNode("Tide"),
+          StringNode("Roll")
+        ))
+      ))
+      val prog = Program(List(
+        Print(StringVal("Roll")),
+        Print(StringVal("Tide")),
+        Print(StringVal("Roll"))
+      ))
+
+      IntermediateRepresentation.interpret(progAst) should be (prog)
+    }
   }
 }
