@@ -6,6 +6,7 @@ import metal.js.JsMetal
 
 import java.io.File
 import scala.io.Source
+import com.joescii.lisp.ir.IntermediateRepresentation
 
 object CompilerMain extends App {
   if(args.length < 3){
@@ -45,10 +46,12 @@ object Compiler {
 
     println("Compiling "+srcs.length+" sources")
 
-    val programs = srcs.map { s =>
+    val programAsts = srcs.map { s =>
       val code = Source.fromFile(s, "utf-8").mkString
       LispParser.parse(code)
     }
+
+    val programs = programAsts.map(IntermediateRepresentation.interpret)
 
     val classFiles = programs.flatMap(p => JvmMetal.forge(p, jvmTarget))
     val jsFiles    = programs.flatMap(p => JsMetal.forge(p, jsTarget))

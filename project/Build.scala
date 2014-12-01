@@ -50,7 +50,7 @@ object CompilerBuild extends Build {
       libraryDependencies ++= Seq(
       )
     )
-  ).dependsOn(parser)
+  ).dependsOn(ir)
 
   lazy val jvm_metal = Project(
     id = "jvm-metal",
@@ -62,7 +62,7 @@ object CompilerBuild extends Build {
         "me.qmx.jitescript" % "jitescript" % "0.3.0" % "compile"
       )
     )
-  ).dependsOn(metal, parser)
+  ).dependsOn(metal, ir)
 
   lazy val js_metal = Project(
     id = "js-metal",
@@ -74,7 +74,7 @@ object CompilerBuild extends Build {
         lift
       )
     )
-  ).dependsOn(metal, parser)
+  ).dependsOn(metal, ir)
   
   lazy val compiler = {
     import sbtassembly.Plugin._
@@ -91,7 +91,7 @@ object CompilerBuild extends Build {
         libraryDependencies ++= Seq(
         )
       )
-    ).dependsOn(parser, jvm_metal, js_metal)
+    ).dependsOn(parser, ir, jvm_metal, js_metal)
   }
   
   lazy val plugin = Project(

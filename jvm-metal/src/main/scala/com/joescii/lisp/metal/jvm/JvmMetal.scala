@@ -2,14 +2,14 @@ package com.joescii.lisp
 package metal
 package jvm
 
-import parser.ast._
+import ir._
 import java.io.{FileOutputStream, File}
 
 /**
  * Created by jbarnes on 11/10/2014.
  */
 object JvmMetal extends Metal {
-  override def forge(program:ProgramNode, target:File):Seq[File] = {
+  override def forge(program:Program, target:File):Seq[File] = {
     val jite = HelloWorld.jite
 
     val helloClassFile = new File(target, "HelloJite.class")
