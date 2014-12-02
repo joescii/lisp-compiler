@@ -88,7 +88,9 @@ object CompilerBuild extends Build {
         description := "All of this crap rolled into a compiler",
         jarName in assembly := "lispc.jar",
         mainClass in assembly := Some("com.joescii.lisp.CompilerMain"),
+        fork in Test := true,
         libraryDependencies ++= Seq(
+          scalatest
         )
       )
     ).dependsOn(parser, ir, jvm_metal, js_metal)

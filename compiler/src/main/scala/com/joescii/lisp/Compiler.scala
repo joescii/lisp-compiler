@@ -1,8 +1,8 @@
 package com.joescii.lisp
 
 import parser.LispParser
-import metal.jvm.JvmMetal
-import metal.js.JsMetal
+import com.joescii.lisp.metal.jvm.{ClassFileContents, JvmMetal}
+import com.joescii.lisp.metal.js.{JsFileContents, JsMetal}
 
 import java.io.File
 import scala.io.Source
@@ -35,26 +35,30 @@ object CompilerMain extends App {
 }
 
 object Compiler {
+  def compile(programContents:Seq[String]):(Seq[ClassFileContents], Seq[JsFileContents]) = {
+    val programTokens = programContents.map(LispParser.parse)
+    val programs      = programTokens.map(IntermediateRepresentation.interpret)
+//    val classFiles    = programs.flatMap(p => JvmMetal.forge(p, jvmTarget))
+    val jsFiles       = programs.map(JsMetal.toJs)
+    (Seq(), jsFiles)
+  }
+
   def compile(src:File, jvmTarget:File, jsTarget:File):(Seq[File], Seq[File]) = {
     val srcs = if(src.isDirectory) {
       src.listFiles().filter(_.getName.endsWith(".lisp")).toList
     } else if(src.getName.endsWith(".lisp")) {
-      List(src)
+      Seq(src)
     } else {
-      List()
+      Seq()
     }
 
     println("Compiling "+srcs.length+" sources")
 
-    val programAsts = srcs.map { s =>
-      val code = Source.fromFile(s, "utf-8").mkString
-      LispParser.parse(code)
-    }
-
-    val programs = programAsts.map(IntermediateRepresentation.interpret)
-
-    val classFiles = programs.flatMap(p => JvmMetal.forge(p, jvmTarget))
-    val jsFiles    = programs.flatMap(p => JsMetal.forge(p, jsTarget))
+    val programContents = srcs.map(Source.fromFile(_, "utf-8").mkString)
+    val programTokens = programContents.map(LispParser.parse)
+    val programs      = programTokens.map(IntermediateRepresentation.interpret)
+    val classFiles    = programs.flatMap(p => JvmMetal.forge(p, jvmTarget))
+    val jsFiles       = programs.flatMap(p => JsMetal.forge(p, jsTarget))
 
     (classFiles, jsFiles)
   }

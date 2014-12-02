@@ -11,13 +11,13 @@ import JE._
 import JsCmds._
 
 object JsMetal extends Metal {
-  def toJs(program:Program):List[String] = {
+  def toJs(program:Program):JsFileContents = {
     val jsCmds = program.vs.map {
       case Print(s) => print(s)
       case _ => Noop
     }
 
-    jsCmds.map(_.toJsCmd)
+    jsCmds.map(_.toJsCmd).mkString("\n")
   }
 
   override def forge(program:Program, target:File):Seq[File] = {
@@ -26,7 +26,7 @@ object JsMetal extends Metal {
     val js = toJs(program)
 
     out.println("#!/usr/bin/jjs")
-    js.foreach(out.print)
+    out.println(js)
     out.flush()
     out.close()
 
