@@ -9,7 +9,7 @@ class PrintSpecs extends WordSpec with ShouldMatchers {
       val prog =
         """(print "Roll Tide")"""
       val (jvm, js) = r(prog)
-      js should be ("Roll Tide")
+      js should be (List("Roll Tide"))
     }
   }
 }
