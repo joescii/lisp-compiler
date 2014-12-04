@@ -23,7 +23,7 @@ object CompilerMain extends App {
   val jsTarget = new File(jsTargetName)
 
   if(!jvmTarget .isDirectory) {
-    println("<jvmTarget > must be a writable directory")
+    println("<jvmTarget> must be a writable directory")
     System exit 1
   }
   if(!jsTarget .isDirectory) {
@@ -35,14 +35,6 @@ object CompilerMain extends App {
 }
 
 object Compiler {
-  def compile(programContents:Seq[String]):(Seq[ClassFileContents], Seq[JsFileContents]) = {
-    val programTokens = programContents.map(LispParser.parse)
-    val programs      = programTokens.map(IntermediateRepresentation.interpret)
-//    val classFiles    = programs.flatMap(p => JvmMetal.forge(p, jvmTarget))
-    val jsFiles       = programs.map(JsMetal.toJs)
-    (Seq(), jsFiles)
-  }
-
   def compile(src:File, jvmTarget:File, jsTarget:File):(Seq[File], Seq[File]) = {
     val srcs = if(src.isDirectory) {
       src.listFiles().filter(_.getName.endsWith(".lisp")).toList

@@ -1,8 +1,6 @@
 package com.joescii.lisp
 package compiler
 
-import metal.jvm.ClassFileContents
-import metal.js.JsFileContents
 import javax.script.ScriptEngineManager
 import scala.io.Source
 import java.nio.file.Files
@@ -14,7 +12,7 @@ object ProgramRunner {
     val jsDir = new File(temp, "js")
     val classesDir = new File(temp, "classes")
     val srcsDir = new File(temp, "src")
-    val src = new File(temp, "test.lisp")
+    val src = new File(srcsDir, "test.lisp")
 
     write(program, src)
 
