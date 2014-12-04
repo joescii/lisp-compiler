@@ -12,6 +12,7 @@ object JvmMetal extends Metal {
   override def forge(program:Program, target:File):Seq[File] = {
     val jite = HelloWorld.jite
 
+    target.mkdirs()
     val helloClassFile = new File(target, "HelloJite.class")
 
     val outStream = new FileOutputStream(helloClassFile)

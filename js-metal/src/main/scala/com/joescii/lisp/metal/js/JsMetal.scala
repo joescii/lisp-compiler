@@ -21,11 +21,12 @@ object JsMetal extends Metal {
   }
 
   override def forge(program:Program, target:File):Seq[File] = {
+    target.mkdirs()
     val outFile = new File(target, "HelloJs.js")
     val out = new PrintStream(new FileOutputStream(outFile))
     val js = toJs(program)
 
-    out.println("#!/usr/bin/jjs")
+//    out.println("#!/usr/bin/jjs")
     out.println(js)
     out.flush()
     out.close()
