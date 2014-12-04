@@ -5,11 +5,23 @@ import ProgramRunner.{ run => r }
 
 class PrintSpecs extends WordSpec with ShouldMatchers {
   "The Print command" should {
-    "work or whatever" in {
+    "print 'Roll Tide'" in {
       val prog =
         """(print "Roll Tide")"""
       val (jvm, js) = r(prog)
       js should be (Seq("Roll Tide"))
     }
+
+    "print 'Roll', 'Tide', 'Roll' on three separate lines" in {
+      val prog =
+        """
+          (print "Roll")
+          (print "Tide")
+          (print "Roll")
+        """
+      val (jvm, js) = r(prog)
+      js should be (Seq("Roll", "Tide", "Roll"))
+    }
+
   }
 }

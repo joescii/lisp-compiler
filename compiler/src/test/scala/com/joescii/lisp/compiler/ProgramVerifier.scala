@@ -14,6 +14,7 @@ object ProgramRunner {
     val srcsDir = new File(temp, "src")
     val src = new File(srcsDir, "test.lisp")
 
+    srcsDir.mkdirs()
     write(program, src)
 
     val (classFiles, jsFiles) = Compiler.compile(src, classesDir, jsDir)
