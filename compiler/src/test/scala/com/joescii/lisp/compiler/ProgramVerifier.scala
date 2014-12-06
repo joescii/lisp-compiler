@@ -45,17 +45,26 @@ object ProgramRunner {
 
   def runJs(scripts:Seq[File]):Seq[String] = {
     val scriptNames = scripts.map(_.getCanonicalPath)
-    callJava(
-      clazz = "com.joescii.lisp.compiler.JsRunner",
-      cp = System.getProperty("java.class.path"),
-      args = scriptNames
+    callJjs(
+      scripts = scriptNames
     )
   }
 
-  private def callJava(clazz:String, cp:String, args:Seq[String] = Seq()) = {
+  private def callJava(clazz:String, cp:String) = {
     import scala.collection.JavaConverters._
     val java = System.getProperty("java.home") + "/bin/java"
-    val builder = new ProcessBuilder((List(java, "-classpath", cp, clazz) ++ args).asJava)
+    val builder = new ProcessBuilder(List(java, "-classpath", cp, clazz).asJava)
+    toOutput(builder)
+  }
+
+  private def callJjs(scripts:Seq[String]) = {
+    import scala.collection.JavaConverters._
+    val jjs = System.getProperty("java.home") + "/bin/jjs"
+    val builder = new ProcessBuilder((jjs +: scripts).asJava)
+    toOutput(builder)
+  }
+
+  private def toOutput(builder:ProcessBuilder) = {
     builder.redirectErrorStream(true)
     val proc = builder.start()
     val buffer = Source.fromInputStream(proc.getInputStream, "utf-8")
@@ -63,12 +72,5 @@ object ProgramRunner {
     proc.waitFor()
     output
   }
-}
 
-object JsRunner extends App {
-  val engineManager = new ScriptEngineManager(null)
-  val engine = engineManager.getEngineByName("nashorn")
-  args.map(Source.fromFile(_, "utf-8"))
-    .map(_.getLines().mkString("\n"))
-    .foreach(engine.eval)
 }
