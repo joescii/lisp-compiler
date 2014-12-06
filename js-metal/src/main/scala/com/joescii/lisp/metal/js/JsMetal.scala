@@ -12,8 +12,9 @@ import JsCmds._
 
 object JsMetal extends Metal {
   def toJs(program:Program):JsFileContents = {
-    val jsCmds = program.vs.map {
+    val jsCmds:List[JsCmd] = program.vs.map {
       case Print(s) => print(s)
+      case Let(SymbolicName(name), v) => let(name, v)
       case _ => Noop
     }
 
@@ -33,10 +34,16 @@ object JsMetal extends Metal {
 
     Seq(outFile)
   }
+  
+  def toJValue(v:Value):JsExp = v match {
+    case StringVal(s) => JString(s)
+  }
 
   def print(v:Value):JsCmd = v match {
-    case StringVal(s) => Call("print", JString(s))
+    case s:StringVal => Call("print", toJValue(s))
+    case SymbolicName(name) => Call("print", JsVar(name))
     case _ => Noop
   }
 
+  def let(name:String, v:Value):JsCmd = JsCrVar(name, toJValue(v))
 }
