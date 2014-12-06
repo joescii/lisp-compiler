@@ -1,1 +1,2 @@
-(print "Hello Lisp!")
+(let msg "Hello Lisp!")
+(print msg)
