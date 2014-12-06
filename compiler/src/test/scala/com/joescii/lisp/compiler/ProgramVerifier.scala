@@ -18,7 +18,7 @@ object ProgramRunner {
     write(program, src)
 
     val (classFiles, jsFiles) = Compiler.compile(src, classesDir, jsDir)
-    val jvm = runJvm(classFiles)
+    val jvm = runJvm(classesDir)
     val js  = runJs(jsFiles)
 
     delete(temp)
@@ -36,16 +36,28 @@ object ProgramRunner {
     f.delete()
   }
 
-  def runJvm(byteCodes:Seq[File]):Seq[String] = {
-    Seq()
+  def runJvm(classesDir:File):Seq[String] = {
+    callJava(
+      "HelloJite",
+      cp = classesDir.getCanonicalPath
+    )
   }
 
   def runJs(scripts:Seq[File]):Seq[String] = {
-    import scala.collection.JavaConverters._
-    val cp = System.getProperty("java.class.path")
-    val java = System.getProperty("java.home") + "/bin/java"
     val scriptNames = scripts.map(_.getCanonicalPath)
-    val proc = new ProcessBuilder((List(java, "-classpath", cp, "com.joescii.lisp.compiler.JsRunner") ++ scriptNames).asJava).start()
+    callJava(
+      clazz = "com.joescii.lisp.compiler.JsRunner",
+      cp = System.getProperty("java.class.path"),
+      args = scriptNames
+    )
+  }
+
+  private def callJava(clazz:String, cp:String, args:Seq[String] = Seq()) = {
+    import scala.collection.JavaConverters._
+    val java = System.getProperty("java.home") + "/bin/java"
+    val builder = new ProcessBuilder((List(java, "-classpath", cp, clazz) ++ args).asJava)
+    builder.redirectErrorStream(true)
+    val proc = builder.start()
     val buffer = Source.fromInputStream(proc.getInputStream, "utf-8")
     val output = buffer.getLines().toSeq
     proc.waitFor()

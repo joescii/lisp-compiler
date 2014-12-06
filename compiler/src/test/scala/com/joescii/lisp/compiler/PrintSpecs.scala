@@ -10,6 +10,7 @@ class PrintSpecs extends WordSpec with ShouldMatchers {
         """(print "Roll Tide")"""
       val (jvm, js) = r(prog)
       js should be (Seq("Roll Tide"))
+      jvm should be(js)
     }
 
     "print 'Roll', 'Tide', 'Roll' on three separate lines" in {
@@ -21,6 +22,7 @@ class PrintSpecs extends WordSpec with ShouldMatchers {
         """
       val (jvm, js) = r(prog)
       js should be (Seq("Roll", "Tide", "Roll"))
+      jvm should be(js)
     }
 
   }
