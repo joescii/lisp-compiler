@@ -33,21 +33,33 @@ object JvmMetal extends Metal {
 object LispJite {
   implicit class LispCodeBlock(c:CodeBlock) {
     def print(v:Value) = {
-      val str = v match {
-        case StringVal(s) => s
-        case IntVal(i) => i.toString
-        case SymbolicName(name) => name
+      v match {
+        case StringVal(s) =>
+          c.getstatic(p(classOf[System]), "out", ci(classOf[PrintStream]))
+            .ldc(s)
+            .invokevirtual(p(classOf[PrintStream]), "println", sig(classOf[Unit], classOf[String]))
+
+        //        case IntVal(i) => i.toString
+        case SymbolicName(name) =>
+          c.getstatic(p(classOf[System]), "out", ci(classOf[PrintStream]))
+            .aload(1)
+            .invokevirtual(p(classOf[PrintStream]), "println", sig(classOf[Unit], classOf[String]))
+
       }
-      c.getstatic(p(classOf[System]), "out", ci(classOf[PrintStream]))
-        .ldc(str)
-        .invokevirtual(p(classOf[PrintStream]), "println", sig(classOf[Unit], classOf[String]))
+    }
+    def declareValue(name:String, v:Value) = {
+      v match {
+        case StringVal(s) =>
+          c.ldc(s)
+            .astore(1)
+      }
     }
   }
 
   def apply(program:Program) = new JiteClass("HelloJite") {
-    val code = program.vs.foldRight(new CodeBlock()) {
-      case (Print(v), c) => c.print(v)
-      case (Let(SymbolicName(name), v), c) => c
+    val code = program.vs.foldLeft(new CodeBlock()) {
+      case (c, Print(v)) => c.print(v)
+      case (c, Let(SymbolicName(name), v)) => c.declareValue(name, v)
     }
 
     defineMethod("main", ACC_PUBLIC | ACC_STATIC, sig(classOf[Unit], classOf[Array[String]]), code.voidreturn())

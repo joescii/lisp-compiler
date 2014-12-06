@@ -13,7 +13,8 @@ class LetSpecs extends WordSpec with ShouldMatchers {
         """
       val (jvm, js) = r(prog)
       js should be(Seq("Roll Tide"))
-//      jvm should be(js)
+      println(jvm mkString "\n")
+      jvm should be(js)
     }
 
   }
