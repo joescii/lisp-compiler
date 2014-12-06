@@ -36,6 +36,7 @@ object LispJite {
       val str = v match {
         case StringVal(s) => s
         case IntVal(i) => i.toString
+        case SymbolicName(name) => name
       }
       c.getstatic(p(classOf[System]), "out", ci(classOf[PrintStream]))
         .ldc(str)
@@ -46,6 +47,7 @@ object LispJite {
   def apply(program:Program) = new JiteClass("HelloJite") {
     val code = program.vs.foldRight(new CodeBlock()) {
       case (Print(v), c) => c.print(v)
+      case (Let(SymbolicName(name), v), c) => c
     }
 
     defineMethod("main", ACC_PUBLIC | ACC_STATIC, sig(classOf[Unit], classOf[Array[String]]), code.voidreturn())

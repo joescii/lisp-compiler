@@ -5,9 +5,11 @@ import com.joescii.lisp.parser.ast._
 object IntermediateRepresentation {
   def interpret(program:ProgramNode):Program = {
     val values = program.lisps.flatMap { l =>
-      l.atoms.headOption match {
-        case Some(SymbolNode("print")) =>
-          toValues(l.atoms.tail).map(Print(_))
+      l.atoms match {
+        case SymbolNode("print") :: tail =>
+          toValues(tail).map(Print(_))
+        case SymbolNode("let") :: SymbolNode(name) :: StringNode(str) :: Nil =>
+          List(Let(SymbolicName(name), StringVal(str)))
         case _ => List()
       }
     }
@@ -17,6 +19,7 @@ object IntermediateRepresentation {
 
   private def toValues(nodes:List[AstNode]) = nodes.map {
     case StringNode(str) => StringVal(str)
+    case SymbolNode(sym) => SymbolicName(sym)
   }
   private def toValue(node:StringNode) = StringVal(node.string)
 }

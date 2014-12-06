@@ -4,7 +4,7 @@ import org.scalatest.{ShouldMatchers, WordSpec}
 import ProgramRunner.{ run => r }
 
 class PrintSpecs extends WordSpec with ShouldMatchers {
-  "The Print command" should {
+  "The Print function" should {
     "print 'Roll Tide'" in {
       val prog =
         """(print "Roll Tide")"""

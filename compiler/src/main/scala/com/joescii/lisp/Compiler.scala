@@ -49,8 +49,8 @@ object Compiler {
     val programContents = srcs.map(Source.fromFile(_, "utf-8").mkString)
     val programTokens = programContents.map(LispParser.parse)
     val programs      = programTokens.map(IntermediateRepresentation.interpret)
-    val classFiles    = programs.flatMap(p => JvmMetal.forge(p, jvmTarget))
     val jsFiles       = programs.flatMap(p => JsMetal.forge(p, jsTarget))
+    val classFiles    = programs.flatMap(p => JvmMetal.forge(p, jvmTarget))
 
     (classFiles, jsFiles)
   }

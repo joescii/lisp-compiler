@@ -39,5 +39,20 @@ class IntermediateRepresentationSpecs extends WordSpec with ShouldMatchers {
 
       IntermediateRepresentation.interpret(progAst) should be (prog)
     }
+
+    "handle let for assigning a string" in {
+      val progAst = ProgramNode(List(
+        ListNode(List(
+          SymbolNode("let"),
+          SymbolNode("name"),
+          StringNode("NAME")
+        ))
+      ))
+      val prog = Program(List(
+        Let(SymbolicName("name"), StringVal("NAME"))
+      ))
+
+      IntermediateRepresentation.interpret(progAst) should be (prog)
+    }
   }
 }
