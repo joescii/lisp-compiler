@@ -32,20 +32,16 @@ object JvmMetal extends Metal {
 
 object LispJite {
   implicit class LispCodeBlock(c:CodeBlock) {
+    private def loadValue(v:Value) = v match {
+      case StringVal(s) => c.ldc(s)
+      //        case IntVal(i) => i.toString
+      case SymbolicName(name) => c.aload(1)
+    }
+
     def print(v:Value) = {
-      v match {
-        case StringVal(s) =>
-          c.getstatic(p(classOf[System]), "out", ci(classOf[PrintStream]))
-            .ldc(s)
-            .invokevirtual(p(classOf[PrintStream]), "println", sig(classOf[Unit], classOf[String]))
-
-        //        case IntVal(i) => i.toString
-        case SymbolicName(name) =>
-          c.getstatic(p(classOf[System]), "out", ci(classOf[PrintStream]))
-            .aload(1)
-            .invokevirtual(p(classOf[PrintStream]), "println", sig(classOf[Unit], classOf[String]))
-
-      }
+      c.getstatic(p(classOf[System]), "out", ci(classOf[PrintStream]))
+      loadValue(v)
+        .invokevirtual(p(classOf[PrintStream]), "println", sig(classOf[Unit], classOf[String]))
     }
     def declareValue(name:String, v:Value) = {
       v match {
