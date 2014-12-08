@@ -141,7 +141,21 @@ class ParserSpecs extends WordSpec with ShouldMatchers {
           ))
         ))
       )
+    }
 
+    "parse a symbol with letters and numbers" in {
+      val code = "(let val5 42)"
+      val program = LispParser parse code
+
+      program should be(
+        ProgramNode(List(
+          ListNode(List(
+            SymbolNode("let"),
+            SymbolNode("val5"),
+            NumberNode(42)
+          ))
+        ))
+      )
     }
   }
 }

@@ -30,7 +30,7 @@ class LispParser extends Parser {
 
   def Atom:Rule1[AtomNode] = rule ( Symbol | Number | Strng )
 
-  def Symbol = rule { oneOrMore(AlphaChar | SpecialChar) ~> SymbolNode ~ zeroOrMore(AlphaChar | Digit | SpecialChar) }
+  def Symbol = rule { group(oneOrMore(AlphaChar | SpecialChar) ~ zeroOrMore(AlphaChar | Digit | SpecialChar)) ~> SymbolNode }
 
   def SpecialChar = rule { anyOf("~!@#%^&*-+=:<>?/\\|") }
 
