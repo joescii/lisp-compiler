@@ -39,12 +39,12 @@ object LispJite {
     case SymbolicName(name) => c.aload(locals.indexOf(name))
   }
 
-  def print(c:CodeBlock, locals:LocalVariables, v:Value) = {
+  private def print(c:CodeBlock, locals:LocalVariables, v:Value) = {
     c.getstatic(p(classOf[System]), "out", ci(classOf[PrintStream]))
     loadValue(c, locals, v)
       .invokevirtual(p(classOf[PrintStream]), "println", sig(classOf[Unit], classOf[String]))
   }
-  def declareValue(c:CodeBlock, locals:LocalVariables, name:String, v:Value) = {
+  private def declareValue(c:CodeBlock, locals:LocalVariables, name:String, v:Value) = {
     v match {
       case StringVal(s) =>
         c.ldc(s)
