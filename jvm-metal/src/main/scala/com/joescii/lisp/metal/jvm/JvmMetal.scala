@@ -31,34 +31,35 @@ object JvmMetal extends Metal {
 }
 
 object LispJite {
-  implicit class LispCodeBlock(c:CodeBlock) {
-    private def loadValue(v:Value) = v match {
-      case StringVal(s) => c.ldc(s)
-      //        case IntVal(i) => i.toString
-      case SymbolicName(name) => c.aload(1)
-    }
+  type LocalVariables = Seq[String]
 
-    def print(v:Value) = {
-      c.getstatic(p(classOf[System]), "out", ci(classOf[PrintStream]))
-      loadValue(v)
-        .invokevirtual(p(classOf[PrintStream]), "println", sig(classOf[Unit], classOf[String]))
-    }
-    def declareValue(name:String, v:Value) = {
-      v match {
-        case StringVal(s) =>
-          c.ldc(s)
-            .astore(1)
-      }
+  private def loadValue(c:CodeBlock, locals:LocalVariables, v:Value) = v match {
+    case StringVal(s) => c.ldc(s)
+    //        case IntVal(i) => i.toString
+    case SymbolicName(name) => c.aload(locals.indexOf(name))
+  }
+
+  def print(c:CodeBlock, locals:LocalVariables, v:Value) = {
+    c.getstatic(p(classOf[System]), "out", ci(classOf[PrintStream]))
+    loadValue(c, locals, v)
+      .invokevirtual(p(classOf[PrintStream]), "println", sig(classOf[Unit], classOf[String]))
+  }
+  def declareValue(c:CodeBlock, locals:LocalVariables, name:String, v:Value) = {
+    v match {
+      case StringVal(s) =>
+        c.ldc(s)
+          .astore(locals.length)
     }
   }
 
   def apply(program:Program) = new JiteClass("HelloJite") {
-    val code = program.vs.foldLeft(new CodeBlock()) {
-      case (c, Print(v)) => c.print(v)
-      case (c, Let(SymbolicName(name), v)) => c.declareValue(name, v)
+    val locals = Seq("args")
+    val codeAndLocals = program.vs.foldLeft((new CodeBlock(), locals)) {
+      case ((c, vs), Print(v)) => (print(c, vs, v), vs)
+      case ((c, vs), Let(SymbolicName(name), v)) => (declareValue(c, vs, name, v), vs :+ name)
     }
 
-    defineMethod("main", ACC_PUBLIC | ACC_STATIC, sig(classOf[Unit], classOf[Array[String]]), code.voidreturn())
+    defineMethod("main", ACC_PUBLIC | ACC_STATIC, sig(classOf[Unit], classOf[Array[String]]), codeAndLocals._1.voidreturn())
   }
 
 
